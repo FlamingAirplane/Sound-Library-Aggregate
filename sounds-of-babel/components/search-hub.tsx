@@ -8,7 +8,10 @@ import { LibraryCard } from '@/components/library-card';
 import { FreesoundResults } from '@/components/freesound-results';
 import { PixabayResults } from '@/components/pixabay-results';
 import { libraries, regionNative, type SoundLibrary, type LibraryRegion, type LibraryLicense, type LibraryType } from '@/lib/libraries';
-import { termForRegion, type Translations } from '@/lib/translate';
+import Link from 'next/link';
+import { termForRegion, translateQuery, type Translations } from '@/lib/translate';
+
+const STATIC_SITE = process.env.NEXT_PUBLIC_STATIC_SITE === '1';
 
 type TypeFilter = LibraryType | 'All';
 type RegionFilter = LibraryRegion | 'All';
@@ -60,8 +63,12 @@ export function SearchHub() {
     if (!term) return;
     setTranslating(true);
     try {
-      const res = await fetch(`/api/translate?q=${encodeURIComponent(term)}`);
-      if (res.ok) setTranslations((await res.json()) as Translations);
+      if (STATIC_SITE) {
+        setTranslations(await translateQuery(term));
+      } else {
+        const res = await fetch(`/api/translate?q=${encodeURIComponent(term)}`);
+        if (res.ok) setTranslations((await res.json()) as Translations);
+      }
     } catch {
     } finally {
       setTranslating(false);
@@ -143,7 +150,7 @@ export function SearchHub() {
     </fieldset>
   );
 
-  const apiLibrariesVisible = regionFilter === 'All' || regionFilter === 'EN';
+  const apiLibrariesVisible = !STATIC_SITE && (regionFilter === 'All' || regionFilter === 'EN');
   const showTranslationPanel = Boolean(submittedTerm) && (translating || translations);
 
   return (
@@ -389,9 +396,9 @@ export function SearchHub() {
           <p className="text-xs text-muted-foreground text-center sm:text-left">
             Always check the licence terms on each library&apos;s site before use in commercial or professional projects.
           </p>
-          <a href="/about" className="text-xs text-primary hover:underline shrink-0">
+          <Link href="/about" className="text-xs text-primary hover:underline shrink-0">
             About Sounds of Babel
-          </a>
+          </Link>
         </div>
       </footer>
     </div>
