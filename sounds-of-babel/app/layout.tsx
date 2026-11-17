@@ -4,24 +4,27 @@ import { ThemeProvider } from '@/components/theme-provider'
 import { Toaster } from '@/components/ui/sonner'
 import { ChunkLoadErrorHandler } from '@/components/chunk-load-error-handler'
 
+
 export const dynamic = 'force-dynamic';
 
 const dmSans = DM_Sans({ subsets: ['latin'], variable: '--font-sans' })
 const jakartaSans = Plus_Jakarta_Sans({ subsets: ['latin'], variable: '--font-display' })
 const jetbrainsMono = JetBrains_Mono({ subsets: ['latin'], variable: '--font-mono' })
 
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH || ''
+
 export const metadata = {
   metadataBase: new URL(process.env.NEXTAUTH_URL || 'http://localhost:3000'),
   title: 'Sounds of Babel — Search Free Sound Libraries',
   description: 'Search the world\'s free sound effect and music libraries in one place. Aggregates Freesound, Pixabay, BBC, ZapSplat, and many more.',
   icons: {
-    icon: '/favicon.svg',
-    shortcut: '/favicon.svg',
+    icon: `${basePath}/favicon.svg`,
+    shortcut: `${basePath}/favicon.svg`,
   },
   openGraph: {
     title: 'Sounds of Babel',
     description: 'Search the world\'s free sound libraries in one place.',
-    images: [{ url: '/og-image.png', width: 1200, height: 630 }],
+    images: [{ url: `${basePath}/og-image.png`, width: 1200, height: 630 }],
   },
 }
 
