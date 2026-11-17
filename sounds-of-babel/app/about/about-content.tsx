@@ -3,7 +3,7 @@
 import { motion } from 'framer-motion';
 import { ArrowLeft, ExternalLink, Volume2, Music, Globe, Shield } from 'lucide-react';
 import Link from 'next/link';
-import { libraries, regionFlags, licenseColors, typeColors, type SoundLibrary } from '@/lib/libraries';
+import { libraries, regionNative, licenseColors, typeColors, type SoundLibrary } from '@/lib/libraries';
 
 export function AboutContent() {
   return (
@@ -54,8 +54,23 @@ export function AboutContent() {
             <ul className="text-sm text-muted-foreground space-y-2 list-disc list-inside">
               <li>Query APIs with live results from <strong className="text-card-foreground">Freesound</strong> and <strong className="text-card-foreground">Pixabay</strong> (with audio previews)</li>
               <li>Generate deep-search links for all other libraries so you can search them in one click</li>
-              <li>Let you filter by <strong className="text-card-foreground">type</strong> (SFX/Music), <strong className="text-card-foreground">region</strong> (EN/FR/JP), and <strong className="text-card-foreground">license</strong></li>
+              <li><strong className="text-card-foreground">Translate</strong> your search into French and Japanese so it reaches libraries in their own language</li>
+              <li>Let you filter by <strong className="text-card-foreground">type</strong>, <strong className="text-card-foreground">site language</strong> and <strong className="text-card-foreground">licence</strong></li>
             </ul>
+          </div>
+        </motion.section>
+
+        <motion.section
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.12 }}
+          className="mb-12"
+        >
+          <h2 className="font-display text-xl font-semibold tracking-tight mb-4">Who runs this and how libraries are chosen</h2>
+          <div className="rounded-lg bg-card p-6 space-y-3 text-sm text-muted-foreground" style={{ boxShadow: 'var(--shadow-md)' }}>
+            <p>Sounds of Babel is an independent project. Libraries are included when they offer sounds that are free to download, are reachable from a plain search link, and publish their licence terms.</p>
+            <p>Licence labels are a summary, not legal advice. Each card links to the library&apos;s own licence page, which is the source of truth. A card without a &ldquo;Checked&rdquo; date has not yet been re-verified.</p>
+            <p>Know a library that belongs here? Tell the site owner so it can be reviewed and added.</p>
           </div>
         </motion.section>
 
@@ -116,7 +131,7 @@ export function AboutContent() {
               >
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-1">
-                    <span className="text-lg">{regionFlags?.[lib?.region] ?? ''}</span>
+                    <span className="text-xs rounded-full bg-muted px-2 py-0.5 text-muted-foreground">{regionNative[lib.region]}</span>
                     <h3 className="font-medium text-card-foreground">{lib?.name ?? 'Unknown'}</h3>
                     {lib?.hasApi && (
                       <span className="px-2 py-0.5 rounded-full text-[10px] font-medium bg-primary/20 text-primary">
@@ -128,7 +143,7 @@ export function AboutContent() {
                 </div>
                 <div className="flex items-center gap-2 shrink-0">
                   <span className={`px-2 py-0.5 rounded-full text-[10px] font-medium ${licenseColors?.[lib?.license] ?? ''}`}>
-                    {lib?.license ?? ''}
+                    {lib.licenseName}
                   </span>
                   <span className={`px-2 py-0.5 rounded-full text-[10px] font-medium ${typeColors?.[lib?.type] ?? ''}`}>
                     {lib?.type ?? ''}
