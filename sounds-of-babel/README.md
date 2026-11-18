@@ -32,7 +32,8 @@ Keys are only used server-side (`app/api/search/[provider]`). Never commit your 
 - `lib/libraries.ts` — metadata and search URL patterns for all libraries (add new ones here)
 - `components/search-hub.tsx` — search bar, filters and results
 - `lib/providers/` — one adapter per live-search service (Freesound, Pixabay) behind a common `SoundProvider` interface; register new ones in `lib/providers/index.ts`
-- `components/provider-results.tsx` — generic live results with audio previews for any provider
+- `components/live-results.tsx` — merged live results from all providers: progressive loading, duplicate hiding, commercial-use filter, sorting
+- `lib/merge-results.ts` — dedupe, interleave and sort helpers
 - `components/library-card.tsx` — deep-link cards
 - `app/about/` — About page and library directory
 

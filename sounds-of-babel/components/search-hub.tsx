@@ -5,8 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Search, X, Languages, ExternalLink, Star, AlertTriangle, Loader2 } from 'lucide-react';
 import { WaveformHero } from '@/components/waveform-hero';
 import { LibraryCard } from '@/components/library-card';
-import { ProviderResults } from '@/components/provider-results';
-import { providers } from '@/lib/providers';
+import { LiveResults } from '@/components/live-results';
 import { libraries, regionNative, type SoundLibrary, type LibraryRegion, type LibraryLicense, type LibraryType } from '@/lib/libraries';
 import Link from 'next/link';
 import { SettingsPanel } from '@/components/settings-panel';
@@ -172,7 +171,7 @@ export function SearchHub() {
               Search the world&apos;s free sound libraries in one place, in their own languages
             </p>
             <p className="text-sm text-muted-foreground max-w-xl mx-auto mb-10">
-              Type a sound once. We translate it for French and Japanese libraries, show live previews from Freesound and Pixabay, and open the rest as ready-made searches.
+              Type a sound once. We translate it for French and Japanese libraries, show live previews from Freesound, Pixabay and Openverse, and open the rest as ready-made searches.
             </p>
           </motion.div>
 
@@ -282,11 +281,9 @@ export function SearchHub() {
         {submittedTerm && apiLibrariesVisible && (
           <>
             <p className="text-sm text-muted-foreground mb-4">
-              Live results with in-page previews come from Freesound and Pixabay. Everything else opens on the library&apos;s own site.
+              Live results with in-page previews come from Freesound, Pixabay and Openverse, with duplicates hidden. Everything else opens on the library&apos;s own site.
             </p>
-            {providers.map((p) => (
-              <ProviderResults key={p.id} provider={p} searchTerm={translations?.en || submittedTerm} />
-            ))}
+            <LiveResults searchTerm={translations?.en || submittedTerm} />
           </>
         )}
 

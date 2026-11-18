@@ -3,6 +3,7 @@ import { ProviderError, type SoundProvider } from './types';
 export const pixabay: SoundProvider = {
   id: 'pixabay',
   name: 'Pixabay',
+  requiresKey: true,
   envVar: 'PIXABAY_API_KEY',
   getKeyUrl: 'https://pixabay.com/api/docs/',
   getKeyLabel: 'Get your Pixabay API key',
@@ -23,6 +24,9 @@ export const pixabay: SoundProvider = {
       previewUrl: h.audio_url,
       pageUrl: h.pageURL,
       author: h.user ?? 'Unknown',
+      license: 'Pixabay licence',
+      commercialUse: true,
+      licenseRank: 1,
     }));
   },
 };

@@ -6,11 +6,16 @@ export interface SoundResult {
   previewUrl?: string;
   pageUrl: string;
   author: string;
+  license: string;
+  commercialUse: boolean | null;
+  licenseRank: number;
+  source?: string;
 }
 
 export interface SoundProvider {
   id: string;
   name: string;
+  requiresKey: boolean;
   envVar: string;
   getKeyUrl: string;
   getKeyLabel: string;

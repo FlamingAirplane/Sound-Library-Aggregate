@@ -1,14 +1,16 @@
 import { ProviderError, type SoundProvider } from './types';
+import { licenseFromUrl } from './license';
 
 export const freesound: SoundProvider = {
   id: 'freesound',
   name: 'Freesound',
+  requiresKey: true,
   envVar: 'FREESOUND_API_KEY',
   getKeyUrl: 'https://freesound.org/apiv2/apply/',
   getKeyLabel: 'Apply for a free Freesound API key',
   searchPageUrl: (q) => `https://freesound.org/search/?q=${encodeURIComponent(q)}`,
   async search(query, apiKey) {
-    const url = `https://freesound.org/apiv2/search/text/?query=${encodeURIComponent(query)}&fields=id,name,duration,tags,previews,url,username&page_size=15&token=${apiKey}`;
+    const url = `https://freesound.org/apiv2/search/text/?query=${encodeURIComponent(query)}&fields=id,name,duration,tags,previews,url,username,license&page_size=15&token=${apiKey}`;
     const res = await fetch(url, { headers: { Accept: 'application/json' }, signal: AbortSignal.timeout(10000) });
     if (!res.ok) {
       const text = await res.text().catch(() => '');
@@ -23,6 +25,7 @@ export const freesound: SoundProvider = {
       previewUrl: r.previews?.['preview-lq-mp3'] ?? r.previews?.['preview-hq-mp3'],
       pageUrl: r.url,
       author: r.username ?? 'Unknown',
+      ...licenseFromUrl(r.license),
     }));
   },
 };

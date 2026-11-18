@@ -1,6 +1,6 @@
 import { providers, getProvider, keyStorageKey, keyHeaderName } from '@/lib/providers';
 
-export const API_KEY_SERVICES = providers.map((p) => ({
+export const API_KEY_SERVICES = providers.filter((p) => p.requiresKey).map((p) => ({
   id: p.id,
   name: p.name,
   getKeyUrl: p.getKeyUrl,
