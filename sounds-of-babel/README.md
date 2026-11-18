@@ -25,13 +25,14 @@ Production build: `yarn build && yarn start`
 | `FREESOUND_API_KEY` | https://freesound.org/apiv2/apply |
 | `PIXABAY_API_KEY` | https://pixabay.com/api/docs/ |
 
-Keys are only used server-side (`app/api/freesound`, `app/api/pixabay`). Never commit your `.env`.
+Keys are only used server-side (`app/api/search/[provider]`). Never commit your `.env`.
 
 ## Project structure
 
 - `lib/libraries.ts` — metadata and search URL patterns for all libraries (add new ones here)
 - `components/search-hub.tsx` — search bar, filters and results
-- `components/freesound-results.tsx`, `components/pixabay-results.tsx` — live API results with audio previews
+- `lib/providers/` — one adapter per live-search service (Freesound, Pixabay) behind a common `SoundProvider` interface; register new ones in `lib/providers/index.ts`
+- `components/provider-results.tsx` — generic live results with audio previews for any provider
 - `components/library-card.tsx` — deep-link cards
 - `app/about/` — About page and library directory
 

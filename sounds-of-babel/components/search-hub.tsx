@@ -5,10 +5,11 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Search, X, Languages, ExternalLink, Star, AlertTriangle, Loader2 } from 'lucide-react';
 import { WaveformHero } from '@/components/waveform-hero';
 import { LibraryCard } from '@/components/library-card';
-import { FreesoundResults } from '@/components/freesound-results';
-import { PixabayResults } from '@/components/pixabay-results';
+import { ProviderResults } from '@/components/provider-results';
+import { providers } from '@/lib/providers';
 import { libraries, regionNative, type SoundLibrary, type LibraryRegion, type LibraryLicense, type LibraryType } from '@/lib/libraries';
 import Link from 'next/link';
+import { SettingsPanel } from '@/components/settings-panel';
 import { termForRegion, translateQuery, type Translations } from '@/lib/translate';
 
 const STATIC_SITE = process.env.NEXT_PUBLIC_STATIC_SITE === '1';
@@ -155,7 +156,8 @@ export function SearchHub() {
 
   return (
     <div className="min-h-screen">
-      <section className="hero-gradient pt-20 pb-16 px-4">
+      <section className="hero-gradient pt-20 pb-16 px-4 relative">
+        {!STATIC_SITE && <SettingsPanel />}
         <div className="max-w-3xl mx-auto text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -282,8 +284,9 @@ export function SearchHub() {
             <p className="text-sm text-muted-foreground mb-4">
               Live results with in-page previews come from Freesound and Pixabay. Everything else opens on the library&apos;s own site.
             </p>
-            <FreesoundResults searchTerm={translations?.en || submittedTerm} />
-            <PixabayResults searchTerm={translations?.en || submittedTerm} />
+            {providers.map((p) => (
+              <ProviderResults key={p.id} provider={p} searchTerm={translations?.en || submittedTerm} />
+            ))}
           </>
         )}
 
