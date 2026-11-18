@@ -150,13 +150,13 @@ export function SearchHub() {
     </fieldset>
   );
 
-  const apiLibrariesVisible = !STATIC_SITE && (regionFilter === 'All' || regionFilter === 'EN');
+  const apiLibrariesVisible = (regionFilter === 'All' || regionFilter === 'EN');
   const showTranslationPanel = Boolean(submittedTerm) && (translating || translations);
 
   return (
     <div className="min-h-screen">
       <section className="hero-gradient pt-20 pb-16 px-4 relative">
-        {!STATIC_SITE && <SettingsPanel />}
+        <SettingsPanel />
         <div className="max-w-3xl mx-auto text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}

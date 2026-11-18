@@ -3,11 +3,12 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Play, Pause, ExternalLink, Clock, Volume2, Loader2, ShieldCheck } from 'lucide-react';
-import { apiKeyHeaders } from '@/lib/api-keys';
+import { apiKeyHeaders, getApiKey } from '@/lib/api-keys';
 import { providers } from '@/lib/providers';
 import { dedupe, interleave, sortResults, type ResultSort, type TaggedResult } from '@/lib/merge-results';
 import type { SoundResult } from '@/lib/providers/types';
 
+const STATIC_SITE = process.env.NEXT_PUBLIC_STATIC_SITE === '1';
 const DEBOUNCE_MS = 300;
 const CACHE_TTL_MS = 5 * 60 * 1000;
 const PAGE_SIZE = 24;
@@ -49,13 +50,23 @@ export function LiveResults({ searchTerm }: { searchTerm: string }) {
           return;
         }
         try {
-          const res = await fetch(`/api/search/${p.id}?q=${encodeURIComponent(term)}`, { headers: apiKeyHeaders(p.id) });
-          const data = await res.json();
-          if (data?.error || !res.ok) {
-            set({ status: 'skipped', results: [], error: data?.error });
-            return;
+          let results: SoundResult[];
+          if (STATIC_SITE) {
+            const key = getApiKey(p.id);
+            if (p.requiresKey && !key) {
+              set({ status: 'skipped', results: [], error: `${p.name} API key not configured` });
+              return;
+            }
+            results = await p.search(term, key);
+          } else {
+            const res = await fetch(`/api/search/${p.id}?q=${encodeURIComponent(term)}`, { headers: apiKeyHeaders(p.id) });
+            const data = await res.json();
+            if (data?.error || !res.ok) {
+              set({ status: 'skipped', results: [], error: data?.error });
+              return;
+            }
+            results = data?.results ?? [];
           }
-          const results: SoundResult[] = data?.results ?? [];
           clientCache.set(cacheKey, { at: Date.now(), results });
           set({ status: 'done', results });
         } catch {

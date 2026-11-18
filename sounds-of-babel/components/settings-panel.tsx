@@ -39,7 +39,7 @@ export function SettingsPanel() {
         <DialogHeader>
           <DialogTitle>API keys</DialogTitle>
           <DialogDescription>
-            Enter your own keys to get live results from Freesound and Pixabay (Openverse needs no key). Keys are stored only in this browser&apos;s localStorage and are sent with your searches to this site&apos;s server, which forwards them to the service.
+            Enter your own keys to get live results from Freesound and Pixabay (Openverse needs no key). Keys are stored only in this browser&apos;s localStorage and are only sent to the service you search (directly from your browser on the static site, via this site&apos;s server otherwise).
           </DialogDescription>
         </DialogHeader>
         <div className="space-y-5">
